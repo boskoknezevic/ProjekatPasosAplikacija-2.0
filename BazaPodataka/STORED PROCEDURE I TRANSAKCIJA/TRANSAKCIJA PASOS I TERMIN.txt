@@ -1,0 +1,55 @@
+CREATE PROCEDURE [NoviPasosITermin](
+    @BrojPasosa [int],
+    @Datum [date],
+    @Vreme [time],
+    @JMBGKorisnika [nvarchar](13) ,
+    @DatumIsteka [date],
+    @PTTMesto [int]
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+
+    DECLARE @TerminID INT;
+
+    -- Dodavanje novog termina
+    INSERT INTO TERMIN (Datum, Vreme, BrojPasosa)
+    VALUES (@Datum, @Vreme, @BrojPasosa);
+
+    SET @TerminID = SCOPE_IDENTITY();
+
+    -- Dodavanje novog pasoša
+    INSERT INTO PASOS (BrojPasosa, JMBGKorisnika, Ime, Prezime, PTTMesto, IDDrzavaRodjenja, IDDrzaveDrzavljanstva, PTTMestaPU, DatumPocetkaVazenja, DatumIsteka)
+    VALUES (
+	@BrojPasosa,
+        @JMBGKorisnika,
+        (SELECT Ime FROM KORISNIK WHERE JMBG = @JMBGKorisnika),
+        (SELECT Prezime FROM KORISNIK WHERE JMBG = @JMBGKorisnika),
+        @PTTMesto,
+        (SELECT IDDrzavaRodjenja FROM KORISNIK WHERE JMBG = @JMBGKorisnika),
+        (SELECT IDDrzavaDrzavljanstva FROM KORISNIK WHERE JMBG = @JMBGKorisnika),
+        (SELECT PTTMestaPU FROM ZAHTEVZAIZDAVANJEPASOSA WHERE JMBGKorisnika = @JMBGKorisnika),
+        @Datum,
+        @DatumIsteka
+    );
+
+    COMMIT
+END
+GO
+
+CREATE PROCEDURE [ObrisiPasosITermin](
+    @IDTermina [int]
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+
+    -- Brisanje pasoša
+    DELETE FROM PASOS WHERE BrojPasosa = (SELECT BrojPasosa FROM TERMIN WHERE IDTermina = @IDTermina);
+
+    -- Brisanje termina
+    DELETE FROM TERMIN WHERE IDTermina = @IDTermina;
+
+    COMMIT
+END
+GO

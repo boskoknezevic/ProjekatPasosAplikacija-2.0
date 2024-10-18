@@ -1,0 +1,63 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewBag.Title = "Измена термина";
+    DataTable table = Model.Tables[0]; // Pretpostavljam da podaci dolaze iz prve tabele DataSet-a
+    DataRow row = table.Rows[0]; // Pretpostavljam da je prvi red onaj koji trebaš prikazati
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>@ViewBag.Title</h1>
+
+        <form method="post" action="@Url.Action("IzmeniPodatkeTermina", "Admin")">
+            <!-- ID Termina (read-only) -->
+            <div class="form-group">
+                <label for="idTermina">ID Термина:</label>
+                <input type="text" id="idTermina" name="IDTermina" value="@row["IDTermina"]" class="form-control" readonly />
+            </div>
+
+            <!-- Broj Pasosa (read-only) -->
+            <div class="form-group">
+                <label for="brojPasosa">Број Пасоша:</label>
+                <input type="text" id="brojPasosa" name="BrojPasosa" value="@row["BrojPasosa"]" class="form-control" readonly />
+            </div>
+
+            <!-- Ime Korisnika (read-only) -->
+            <div class="form-group">
+                <label for="ime">Име:</label>
+                <input type="text" id="ime" name="ImeKorisnika" value="@row["ImeKorisnika"]" class="form-control" readonly />
+            </div>
+
+            <!-- Prezime Korisnika (read-only) -->
+            <div class="form-group">
+                <label for="prezime">Презиме:</label>
+                <input type="text" id="prezime" name="PrezimeKorisnika" value="@row["PrezimeKorisnika"]" class="form-control" readonly />
+            </div>
+
+            <!-- Datum (editable, date picker) -->
+            <div class="form-group">
+                <label for="datum">Датум:</label>
+                <input type="date" id="datum" name="Datum" value="@((row["Datum"] as DateTime?)?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+
+            <!-- Vreme (editable, time picker) -->
+            <div class="form-group">
+                <label for="vreme">Време:</label>
+                <input type="time" id="vreme" name="Vreme" value="@(((TimeSpan)row["Vreme"]).ToString("hh\\:mm"))" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-sm btn-success">Потврди</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewBag.Title = "Детаљи о пасошу";
+    DataTable table = Model.Tables[0]; // Pretpostavljam da podaci dolaze iz prve tabele DataSet-a
+    DataRow row = table.Rows[0]; // Pretpostavljam da je prvi red onaj koji trebaš prikazati
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>@ViewBag.Title</h1>
+
+        <form method="post" action="@Url.Action("IzmeniPodatkePasosa", "Admin")">
+            <div class="form-group">
+                <label for="brojPasosa">Број Пасоша:</label>
+                <input type="text" id="brojPasosa" name="BrojPasosa" value="@row["BrojPasosa"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="jmbg">ЈМБГ:</label>
+                <input type="text" id="jmbg" name="JMBGKorisnika" value="@row["JMBGKorisnika"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="ime">Име:</label>
+                <input type="text" id="ime" name="ImeKorisnika" value="@row["ImeKorisnika"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="prezime">Презиме:</label>
+                <input type="text" id="prezime" name="PrezimeKorisnika" value="@row["PrezimeKorisnika"]" class="form-control" readonly />
+            </div>
+
+            <!-- Select polje za Državu Rođenja -->
+            <div class="form-group">
+                <label for="drzavaRodjenja">Држава Рођења:</label>
+                <select id="drzavaRodjenja" name="drzavaRodjenja" class="form-control">
+                    <option value="">Изабери државу</option>
+                    @if(ViewBag.ListaDrzava != null)
+                    {
+                    @foreach (var drzava in ViewBag.ListaDrzava as IEnumerable<dynamic>)
+                    {
+                        <option value="@drzava.SifraDrzave"> @drzava.Naziv </option>
+                        }
+                    }
+                    else
+                    {
+                        <option>Нема држава! </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Select polje za Državljanstvo -->
+            <div class="form-group">
+                <label for="drzavaDrzavljanstva">Држављанство:</label>
+                <select id="drzavaDrzavljanstva" name="drzavaDrzavljanstva" class="form-control">
+                    <option value="">Изабери државу</option>
+                    @if (ViewBag.ListaDrzava != null)
+                    {
+                        @foreach (var drzava in ViewBag.ListaDrzava as IEnumerable<dynamic>)
+                        {
+                            <option value="@drzava.SifraDrzave"> @drzava.Naziv </option>
+                        }
+                    }
+                    else
+                    {
+                        <option>Нема држава! </option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="statusDokumenta">Статус Документа:</label>
+                <select id="statusDokumenta" name="statusDokumenta" class="form-control">
+                    <option value="">Изабери статус</option>
+                    @if (ViewBag.StatusiDokumenta != null)
+                    {
+                        @foreach (var status in ViewBag.StatusiDokumenta as IEnumerable<dynamic>)
+                    {
+                        <option value="@status.ID">@status.Opis</option>
+                    }
+                    }
+                    else
+                    {
+                        <option>Нема статуса!</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-sm btn-success">Потврди</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Поднесите захтев";
+}
+
+<form asp-controller="Korisnik" asp-action="DodajZahtev" method="post">
+    <div class="form-group">
+        <label>Да ли желите да у некој другој ПУ израдите пасош?</label>
+        <div>
+            <input type="radio" id="yesOption" name="izradaPU" value="yes" onclick="toggleMesta(true)">
+            <label for="yesOption">Да</label>
+        </div>
+        <div>
+            <input type="radio" id="noOption" name="izradaPU" value="no" onclick="toggleMesta(false)" checked>
+            <label for="noOption">Не</label>
+        </div>
+    </div>
+
+    <div class="form-group" id="mestaDiv" style="display: none;">
+        <label for="mesto">Изаберите место:</label>
+        <select asp-items="ViewBag.Mesta" name="pttMesto" class="form-control">
+            <option value="">Изабери место</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-sm btn-success" name="action" value="dodaj">Поднеси захтев</button>
+</form>
+
+<h1>Списак претходних захтева:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Датум и Време Захтева</th>
+            <th>ЈМБГ Корисника</th>
+            <th>Статус Захтева</th>
+            <th>Очекивани датум издавања</th>
+            <th>Место ПУ</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["DatumIVremeZahteva"]</td>
+                <td>@row["JMBGKorisnika"]</td>
+                <td>@row["Status"]</td>
+                <td>@row["OcekivaniDatumIzdavanja"]</td>
+                <td>@row["MestoPU"]</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Нема претходних захтева.</p>
+}
+
+<script>
+    function toggleMesta(show) {
+        var mestaDiv = document.getElementById('mestaDiv');
+        if (show) {
+            mestaDiv.style.display = 'block'; // Show ComboBox
+        } else {
+            mestaDiv.style.display = 'none';  // Hide ComboBox
+        }
+    }
+</script>

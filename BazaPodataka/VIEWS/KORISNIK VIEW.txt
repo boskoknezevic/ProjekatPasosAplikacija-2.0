@@ -1,0 +1,28 @@
+CREATE VIEW KorisnikView AS
+SELECT 
+    K.JMBG,
+    K.Ime,
+    K.Prezime,
+    K.DatumRodjenja,
+    K.Adresa,
+    K.Telefon,
+    M.PTT AS PTTMestoID,
+    M.Naziv AS Mesto,
+    DR1.SifraDrzave AS IDDrzavaRodjenja,
+    DR1.Naziv AS DrzavaRodjenja,
+    DR2.SifraDrzave AS IDDrzavaDrzavljanstva,
+    DR2.Naziv AS DrzavaDrzavljanstva,
+    K.KorisnickoIme,
+    P.ID AS PolKorisnikaID,
+    P.Opis AS Pol,
+    K.Email,
+    K.Lozinka,
+    T.ID AS TipKorisnikaID,
+    T.Opis AS TipKorisnika
+FROM 
+    dbo.KORISNIK K
+    JOIN dbo.MESTO M ON K.PTTMesto = M.PTT
+    JOIN dbo.DRZAVA DR1 ON K.IDDrzavaRodjenja = DR1.SifraDrzave
+    JOIN dbo.DRZAVA DR2 ON K.IDDrzavaDrzavljanstva = DR2.SifraDrzave
+    JOIN dbo.POLKORISNIKA P ON K.PolKorisnika = P.ID
+    JOIN dbo.TIPKORISNIKA T ON K.TipKorisnika = T.ID;

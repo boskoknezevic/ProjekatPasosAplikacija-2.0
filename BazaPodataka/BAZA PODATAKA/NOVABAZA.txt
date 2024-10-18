@@ -1,0 +1,188 @@
+USE master
+GO
+
+CREATE DATABASE izdavanjePasosa 
+GO
+
+USE izdavanjePasosa
+GO
+
+CREATE TABLE KORISNIK(
+    JMBG nvarchar(13) NOT NULL PRIMARY KEY,
+    Ime nvarchar(20) NOT NULL,
+    Prezime nvarchar(40) NOT NULL,
+    DatumRodjenja date NOT NULL,
+    Adresa nvarchar(40) NOT NULL,
+    Telefon nvarchar(15) NOT NULL,
+    PTTMesto int NOT NULL,
+    IDDrzavaRodjenja nvarchar(3) NOT NULL,
+    IDDrzavaDrzavljanstva nvarchar(3) NOT NULL,
+    KorisnickoIme nvarchar(20) NOT NULL,
+    PolKorisnika int NOT NULL,
+    Email nvarchar(40) NOT NULL,
+    Lozinka nvarchar(20) NOT NULL,
+    TipKorisnika int NOT NULL
+)
+GO
+
+CREATE TABLE PASOS(
+    BrojPasosa int PRIMARY KEY,
+    JMBGKorisnika nvarchar(13) NOT NULL,
+    Ime nvarchar(20) NOT NULL,
+    Prezime nvarchar(40) NOT NULL,
+    PTTMesto int NOT NULL,
+    IDDrzavaRodjenja nvarchar(3) NOT NULL,
+    IDDrzaveDrzavljanstva nvarchar(3) NOT NULL,
+    PTTMestaPU int NOT NULL,
+    DatumPocetkaVazenja date NULL,
+    DatumIsteka date NULL,
+    StatusDokumenta int NOT NULL
+)
+GO
+
+CREATE TABLE TERMIN(
+    IDTermina int IDENTITY(1,1) PRIMARY KEY,
+    BrojPasosa int NOT NULL,
+    Datum date NOT NULL,
+    Vreme time NOT NULL
+)
+GO
+
+CREATE TABLE ZAHTEVZAIZDAVANJEPASOSA(
+    IDZahteva int IDENTITY(1,1) PRIMARY KEY,
+    DatumiVremeZahteva datetime NOT NULL,
+    JMBGKorisnika nvarchar(13) NOT NULL,
+    OcekivaniDatumIzdavanja date NOT NULL,
+    PTTMestaPU int NOT NULL,
+    Status int NOT NULL
+)
+GO
+
+CREATE TABLE TIPKORISNIKA(
+    ID int IDENTITY(1,1) PRIMARY KEY,
+    Opis nvarchar(20) NOT NULL
+)
+GO
+
+CREATE TABLE TIPSTATUSA(
+    ID int IDENTITY(1,1) PRIMARY KEY,
+    Opis nvarchar(20) NOT NULL
+)
+GO
+
+CREATE TABLE MESTO(
+    PTT int PRIMARY KEY,
+    Naziv nvarchar(40) NOT NULL,
+    SifraDrzave int 
+)
+GO
+
+CREATE TABLE DRZAVA(
+    SifraDrzave nvarchar(3) PRIMARY KEY,
+    Naziv nvarchar(40) NOT NULL
+)
+GO
+
+CREATE TABLE STATUSDOKUMENTA(
+    ID int IDENTITY(1,1) PRIMARY KEY,
+    Opis nvarchar(20) NOT NULL
+)
+GO
+
+CREATE TABLE POLKORISNIKA(
+    ID int IDENTITY(1,1) PRIMARY KEY,
+    Opis nvarchar(20) NOT NULL
+)
+GO
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT UQ_KorisnickoIme
+    UNIQUE (KorisnickoIme);
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT UQ_Email
+    UNIQUE (Email);
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT FK_Korisnik_Mesto
+    FOREIGN KEY (PTTMesto) REFERENCES MESTO(PTT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT FK_Korisnik_DrzavaRodjenja
+    FOREIGN KEY (IDDrzavaRodjenja) REFERENCES DRZAVA(SifraDrzave)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT FK_Korisnik_DrzavaDrzavljanstva
+    FOREIGN KEY (IDDrzavaDrzavljanstva) REFERENCES DRZAVA(SifraDrzave)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT FK_Korisnik_Pol
+    FOREIGN KEY (PolKorisnika) REFERENCES POLKORISNIKA(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE KORISNIK
+ADD CONSTRAINT FK_Korisnik_TipKorisnika
+    FOREIGN KEY (TipKorisnika) REFERENCES TIPKORISNIKA(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE PASOS
+ADD CONSTRAINT FK_Pasos_Korisnik
+    FOREIGN KEY (JMBGKorisnika) REFERENCES KORISNIK(JMBG)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE PASOS
+ADD CONSTRAINT FK_Pasos_Mesto
+    FOREIGN KEY (PTTMesto) REFERENCES MESTO(PTT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE PASOS
+ADD CONSTRAINT FK_Pasos_DrzavaRodjenja
+    FOREIGN KEY (IDDrzavaRodjenja) REFERENCES DRZAVA(SifraDrzave)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE PASOS
+ADD CONSTRAINT FK_Pasos_DrzavaDrzavljanstva
+    FOREIGN KEY (IDDrzavaDrzavljanstva) REFERENCES DRZAVA(SifraDrzave)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE PASOS
+ADD CONSTRAINT FK_Pasos_MestoPU
+    FOREIGN KEY (PTTMestaPU) REFERENCES MESTO(PTT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE TERMIN
+ADD CONSTRAINT FK_Termin_Pasos
+    FOREIGN KEY (BrojPasosa) REFERENCES PASOS(BrojPasosa)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE ZAHTEVZAIZDAVANJEPASOSA
+ADD CONSTRAINT FK_ZahtevKorisnik
+    FOREIGN KEY (JMBGKorisnika) REFERENCES KORISNIK(JMBG)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE ZAHTEVZAIZDAVANJEPASOSA
+ADD CONSTRAINT FK_Zahtev_MestoPU
+    FOREIGN KEY (PTTMestaPU) REFERENCES MESTO(PTT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE ZAHTEVZAIZDAVANJEPASOSA
+ADD CONSTRAINT FK_Zahtev_Status
+    FOREIGN KEY (Status) REFERENCES TIPSTATUSA(ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;

@@ -1,0 +1,77 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewData["Title"] = "Захтеви";
+}
+
+<form method="get" action="@Url.Action("AdminPregledZahteva")">
+    <label for="status">Изаберите статус:</label>
+    <select name="status" id="status">
+        <option value="">Изаберите статус</option>
+        @if (ViewBag.TipoviStatusa != null)
+        {
+            @foreach (var status in ViewBag.TipoviStatusa as IEnumerable<dynamic>)
+        {
+            <option value="@status.ID">@status.Opis</option>
+            }
+        }
+        else
+        {
+            <option>Нема статуса!</option>
+            
+        }
+    </select>
+    <button class="btn btn-success" type="submit">Изабери</button>
+</form>
+
+<h1>Списак свих захтева:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Датум и време захтева</th>
+            <th>ЈМБГ корисника</th>
+            <th>Име</th>
+            <th>Презиме</th>
+            <th>Очекивани датум издавања</th>
+            <th>Место ПУ</th>
+            <th>Статус захтева</th>
+            <th>Измени</th>
+            <th>Обриши</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["DatumIVremeZahteva"]</td>
+                <td>@row["JMBGKorisnika"]</td>
+                <td>@row["ImeKorisnika"]</td>
+                <td>@row["PrezimeKorisnika"]</td>
+                <td>@((row["OcekivaniDatumIzdavanja"] as DateTime?)?.ToString("dd/MM/yyyy"))</td>
+                <td>@row["MestoPU"]</td>
+                <td>@row["Status"]</td>
+                <td>
+                    <form method="post" action="@Url.Action("IzmeniZahtev", "Admin")">
+                            <input type="hidden" name="jmbg" value="@row["JMBGKorisnika"]" />
+                    <input type="hidden" name="action" value="izmeni" />
+                    <button type="submit" class="btn btn-sm btn-info">Измени</button>
+                </form>
+            </td>
+            <td>
+                    <form method="post" action="@Url.Action("IzmeniZahtev", "Admin")">
+                    <input type="hidden" name="idZahteva" value="@row["IDZahteva"]" />
+                    <input type="hidden" name="action" value="obrisi" />
+                    <button type="submit" class="btn btn-sm btn-danger">Обриши</button>
+                </form>
+            </td>
+            </tr>
+        }
+    </table>
+}
+
+else
+{
+    <p>Нема захтева.</p>
+}

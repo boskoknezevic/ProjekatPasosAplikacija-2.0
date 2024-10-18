@@ -1,0 +1,85 @@
+﻿@using System.Data;
+@model System.Data.DataRow
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Издавање пасоша</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2, h3, h4 {
+            color: #1f497d;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        table, th, td {
+            border: 1px solid #1f497d;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        h4 {
+            margin-top: 20px;
+            color: #1f497d;
+        }
+    </style>
+</head>
+<body>
+    <h1>РЕПУБЛИКА СРБИЈА</h1>
+    <h2>ЈАВНА УПРАВА И ЕУПРАВА</h2>
+    <h3>ИЗДАВАЊЕ ПАСОША</h3>
+
+    @if (Model != null)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>ID Захтева</th>
+                <th>Датум и Време Захтева</th>
+                <th>ЈМБГ Корисника</th>
+                <th>Име Корисника</th>
+                <th>Презиме Корисника</th>
+                <th>Очекивани Датум Издавања</th>
+                <th>ПТТ Место ПУ</th>
+                <th>Место ПУ</th>
+                <th>Статус</th>
+            </tr>
+            <tr>
+                <td>@Model["IDZahteva"]</td>
+                <td>@Model["DatumiVremeZahteva"]</td>
+                <td>@Model["JMBGKorisnika"]</td>
+                <td>@Model["ImeKorisnika"]</td>
+                <td>@Model["PrezimeKorisnika"]</td>
+                <td>@Model["OcekivaniDatumIzdavanja"]</td>
+                <td>@Model["PTTMestoPU"]</td>
+                <td>@Model["MestoPU"]</td>
+                <td>@Model["Status"]</td>
+            </tr>
+        </table>
+
+        <p>Понесите иштампану верзију овог документа у заказаном термину.</p>
+        <p>Не заборавите остале документе - личну карту, потврду о држављанству, уплатницу на име израде пасоша.</p>
+    }
+    else
+    {
+        <p>Нема документа за штампу.</p>
+    }
+</body>
+</html>

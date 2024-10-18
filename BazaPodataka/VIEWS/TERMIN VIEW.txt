@@ -1,0 +1,13 @@
+CREATE VIEW TerminView AS
+SELECT 
+    T.IDTermina,
+    P.BrojPasosa,
+    K.JMBG AS JMBGKorisnika,
+    K.Ime AS ImeKorisnika,
+    K.Prezime AS PrezimeKorisnika,
+    T.Datum,
+    T.Vreme
+FROM 
+    dbo.TERMIN T
+    JOIN dbo.PASOS P ON T.BrojPasosa = P.BrojPasosa
+    JOIN dbo.KORISNIK K ON P.JMBGKorisnika = K.JMBG;

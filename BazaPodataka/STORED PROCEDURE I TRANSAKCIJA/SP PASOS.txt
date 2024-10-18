@@ -1,0 +1,62 @@
+CREATE PROCEDURE [DajPasosIzPogleda]
+AS
+BEGIN
+    SELECT * FROM PasosView;
+END
+GO
+
+CREATE PROCEDURE [DajPasosSaDatumom](
+    @IzabraniDatum DATE
+)
+AS
+BEGIN
+    SELECT *
+    FROM PasosView
+    WHERE Datum = @IzabraniDatum;
+END
+GO
+
+CREATE PROCEDURE [DajPasosPoJMBG](
+    @JMBGKorisnika NVARCHAR(13)
+)
+AS
+BEGIN
+    SELECT *
+    FROM PasosView
+    WHERE JMBG = @JMBGKorisnika;
+END
+GO
+
+CREATE PROCEDURE [DajPasosPoPrezimenu](
+    @Prezime NVARCHAR(40)
+)
+AS
+BEGIN
+    SELECT *
+    FROM PasosView
+    WHERE Prezime = @Prezime;
+END
+GO
+
+CREATE PROCEDURE [AžurirajStatusDokumentaPasosa](
+    @BrojPasosa [int],
+    @Status [int]
+)
+AS
+BEGIN
+
+    UPDATE PASOS
+    SET Status = @Status
+    WHERE BrojPasosa = @BrojPasosa;
+
+END
+GO
+
+create procedure DodajDatumePasosu(
+	@DatumIsteka date,
+	@DatumPocetkaVazenja date)
+AS
+	begin	
+	update PASOS set DatumIsteka=@DatumIsteka, DatumPocetkaVazenja=@DatumPocetkaVazenja
+	end
+	go

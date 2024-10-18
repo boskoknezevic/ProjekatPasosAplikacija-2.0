@@ -1,0 +1,46 @@
+﻿@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+@{
+    ViewData["Title"] = "Почетна";
+    var korisnickoIme = ViewData["KorisnickoIme"] as string;
+}
+
+<h1 class="text-center">ДОБРОДОШЛИ, @korisnickoIme</h1>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-6 mb-3">
+            <a class="nav-link text-dark d-block text-center" asp-area="" asp-controller="Korisnik" asp-action="KorisnikZahtev">
+                <button>ПОДНЕСИ ЗАХТЕВ</button>
+            </a>
+        </div>
+        <div class="col-6 mb-3">
+            <a class="nav-link text-dark d-block text-center" asp-area="" asp-controller="Korisnik" asp-action="KorisnikProfil">
+                <button>ПРОФИЛ КОРИСНИКА</button>
+            </a>
+        </div>
+        <div class="col-6 mb-3">
+            <a class="nav-link text-dark d-block text-center" asp-area="" asp-controller="Korisnik" asp-action="KorisnikPasos">
+                <button>ПРЕГЛЕД ПАСОША</button>
+            </a>
+        </div>
+        <div class="col-6 mb-3">
+            <a class="nav-link text-dark d-block text-center" asp-area="" asp-controller="Korisnik" asp-action="KorisnikDokumentStampa">
+                <button>ШТАМПА ДОКУМЕНТА</button>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+CREATE PROCEDURE NoviKorisnik
+( 
+    @JMBG nvarchar(13),
+    @Ime nvarchar(20),
+    @Prezime nvarchar(40),
+    @DatumRodjenja date,
+    @Adresa nvarchar(40),
+    @Telefon nvarchar(15),
+    @PTTMesto int,
+    @IDDrzavaRodjenja nvarchar(3),
+    @IDDrzavaDrzavljanstva nvarchar(3),
+    @KorisnickoIme nvarchar(20),
+    @PolKorisnika int,
+    @Email nvarchar(40),
+    @Lozinka nvarchar(20),
+    @TipKorisnika int
+)
+AS
+BEGIN
+    INSERT INTO KORISNIK (JMBG, Ime, Prezime, DatumRodjenja, Adresa, Telefon, PTTMesto, IDDrzavaRodjenja, IDDrzavaDrzavljanstva, KorisnickoIme, PolKorisnika, Email, Lozinka, TipKorisnika)
+    VALUES (@JMBG, @Ime, @Prezime, @DatumRodjenja, @Adresa, @Telefon, @PTTMesto, @IDDrzavaRodjenja, @IDDrzavaDrzavljanstva, @KorisnickoIme, @PolKorisnika, @Email, @Lozinka, @TipKorisnika)
+END
+GO
+
+CREATE PROCEDURE IzmeniKorisnika
+    @StariJMBG nvarchar(13),
+    @JMBG nvarchar(13),
+    @Ime nvarchar(20),
+    @Prezime nvarchar(40),
+    @DatumRodjenja date,
+    @Adresa nvarchar(40),
+    @Telefon nvarchar(15),
+    @PTTMesto int,
+    @IDDrzavaRodjenja nvarchar(3),
+    @IDDrzavaDrzavljanstva nvarchar(3),
+    @KorisnickoIme nvarchar(20),
+    @PolKorisnika int,
+    @Email nvarchar(40),
+    @Lozinka nvarchar(20),
+    @TipKorisnika int
+AS
+BEGIN
+    UPDATE KORISNIK
+    SET JMBG = @JMBG,
+        Ime = @Ime,
+        Prezime = @Prezime,
+        DatumRodjenja = @DatumRodjenja,
+        Adresa = @Adresa,
+        Telefon = @Telefon,
+        PTTMesto = @PTTMesto,
+        IDDrzavaRodjenja = @IDDrzavaRodjenja,
+        IDDrzavaDrzavljanstva = @IDDrzavaDrzavljanstva,
+        KorisnickoIme = @KorisnickoIme,
+        PolKorisnika = @PolKorisnika,
+        Email = @Email,
+        Lozinka = @Lozinka,
+        TipKorisnika = @TipKorisnika
+    WHERE JMBG = @StariJMBG
+END
+GO
+
+
+CREATE PROCEDURE ObrisiKorisnika
+    @JMBG nvarchar(13)
+AS
+BEGIN
+    DELETE FROM KORISNIK WHERE JMBG = @JMBG
+END
+GO
+
+CREATE PROCEDURE IzmeniTipKorisnika
+    @JMBG nvarchar(13),
+    @TipKorisnika int
+AS
+BEGIN
+    UPDATE KORISNIK
+    SET TipKorisnika = @TipKorisnika
+    WHERE JMBG = @JMBG
+END
+GO
+
+CREATE PROCEDURE DajSveKorisnike
+AS
+BEGIN
+    SELECT * FROM KorisnikView
+END
+GO
+
+CREATE PROCEDURE DajKorisnikaPoPrezimenu
+    @Prezime nvarchar(40)
+AS
+BEGIN
+    SELECT * FROM KorisnikView WHERE Prezime LIKE '%' + @Prezime + '%'
+END
+GO
+
+CREATE PROCEDURE DajKorisnikaPoJMBG
+    @JMBG nvarchar(13)
+AS
+BEGIN
+    SELECT * FROM KorisnikView WHERE JMBG=@JMBG
+END
+GO
+
+CREATE PROCEDURE PronadjiKorisnikaPoEmailu
+    @Email nvarchar(40)
+AS
+BEGIN
+    SELECT * FROM KorisnikView WHERE Email = @Email
+END
+GO

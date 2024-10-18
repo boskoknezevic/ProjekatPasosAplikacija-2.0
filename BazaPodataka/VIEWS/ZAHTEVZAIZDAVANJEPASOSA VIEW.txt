@@ -1,0 +1,17 @@
+CREATE VIEW ZahtevZaIzdavanjePasosaView AS
+SELECT 
+    Z.IDZahteva,
+    Z.DatumiVremeZahteva,
+    K.JMBG AS JMBGKorisnika,
+    K.Ime AS ImeKorisnika,
+    K.Prezime AS PrezimeKorisnika,
+    Z.OcekivaniDatumIzdavanja,
+    M.PTT AS PTTMestoPU,
+    M.Naziv AS MestoPU,
+    S.ID AS StatusID,
+    S.Opis AS Status
+FROM 
+    dbo.ZAHTEVZAIZDAVANJEPASOSA Z
+    JOIN dbo.KORISNIK K ON Z.JMBGKorisnika = K.JMBG
+    JOIN dbo.MESTO M ON Z.PTTMestaPU = M.PTT
+    JOIN dbo.TIPSTATUSA S ON Z.Status = S.ID;

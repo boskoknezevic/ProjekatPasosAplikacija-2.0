@@ -1,0 +1,80 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewData["Title"] = "Корисници";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<form method="get" action="@Url.Action("AdminPregledKorisnika", "Admin")">
+    <label for="prezimeFilter">Претражи по презимену:</label>
+    <input type="text" id="prezimeFilter" name="prezime" />
+    <button type="submit" class="btn btn-sm btn-success">Претражи</button>
+</form>
+
+<h1>Списак свих корисника:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>ЈМБГ</th>
+            <th>Име</th>
+            <th>Презиме</th>
+            <th>Држава држављанства</th>
+            <th>Имејл</th>
+            <th>Лозинка</th>
+            <th>Тип корисника</th>
+            <th>Измени</th>
+            <th>Обриши</th>
+            <th>Промени улогу</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["JMBG"]</td>
+                <td>@row["Ime"]</td>
+                <td>@row["Prezime"]</td>
+                <td>@row["DrzavaDrzavljanstva"]</td>
+                <td>@row["Email"]</td>
+                <td>@row["Lozinka"]</td>
+                <td>@row["TipKorisnika"]</td>
+
+                <td>
+                   <form method="post" action="@Url.Action("IzmeniKorisnika", "Admin")">
+                     <input type="hidden" name="email" value="@row["Email"]" />
+                     <input type="hidden" name="action" value="izmeni" />
+                     <button type="submit" class="btn btn-sm btn-info">Измени</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="@Url.Action("IzmeniKorisnika", "Admin")">
+                        <input type="hidden" name="jmbg" value="@row["JMBG"]" />
+                        <input type="hidden" name="action" value="obrisi" />
+                        <button type="submit" class="btn btn-sm btn-danger">Обриши</button>
+                    </form>
+                </td>
+                @if ((int)row["TipKorisnikaID"] != 1)
+                {
+                <td>
+                    <form method="post" action="@Url.Action("IzmeniKorisnika", "Admin")">
+                        <input type="hidden" name="email" value="@row["Email"]" />
+                        <input type="hidden" name="action" value="dodeliSluzbenikUlogu" />
+                        <button type="submit" class="btn btn-sm btn-warning">Промени улогу</button>
+                    </form>
+                </td>
+                }
+            </tr>
+        }
+    </table>
+}
+
+else
+{
+        <p>Нема корисника.</p>
+}

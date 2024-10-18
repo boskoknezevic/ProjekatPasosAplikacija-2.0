@@ -1,0 +1,76 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewBag.Title = "Детаљи о пасошу";
+    DataTable table = Model.Tables.Count > 0 ? Model.Tables[0] : null;
+    DataRow row = table != null && table.Rows.Count > 0 ? table.Rows[0] : null;
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>@ViewBag.Title</h2>
+
+        @if (row != null)
+        {
+            <form method="post" action="@Url.Action("IzmeniPodatke", "Sluzbenik")">
+                <div class="form-group">
+                    <label for="brojPasosa">Број Пасоша:</label>
+                    <input type="text" id="brojPasosa" name="BrojPasosa" value="@row["BrojPasosa"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="jmbg">ЈМБГ:</label>
+                    <input type="text" id="jmbg" name="JMBGKorisnika" value="@row["JMBGKorisnika"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="ime">Име:</label>
+                    <input type="text" id="ime" name="ImeKorisnika" value="@row["ImeKorisnika"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="prezime">Презиме:</label>
+                    <input type="text" id="prezime" name="PrezimeKorisnika" value="@row["PrezimeKorisnika"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="drzavaRodjenja">Држава Рођења:</label>
+                    <input type="text" id="drzavaRodjenja" name="IDDrzavaRodjenja" value="@row["DrzavaRodjenja"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="drzavaDrzavljanstva">Држављанство:</label>
+                    <input type="text" id="drzavaDrzavljanstva" name="IDDrzaveDrzavljanstva" value="@row["DrzavaDrzavljanstva"]" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="statusDokumenta">Статус Документа:</label>
+                    <select id="statusDokumenta" name="statusDokumenta" class="form-control">
+                        <option value="">Изабери статус</option>
+                        @if (ViewBag.StatusiDokumenta != null)
+                        {
+                            foreach (var status in ViewBag.StatusiDokumenta as IEnumerable<dynamic>)
+                            {
+                                <option value="@status.ID">@status.Opis</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="">Нема података</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-sm btn-success">Потврди</button>
+            </form>
+        }
+        else
+        {
+            <p>Нема података за приказ.</p>
+        }
+    </div>
+</body>
+</html>

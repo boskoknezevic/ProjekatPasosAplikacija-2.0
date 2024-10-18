@@ -1,0 +1,77 @@
+CREATE PROCEDURE NoviZahtev
+(
+    @DatumIVremeZahteva [datetime],
+    @JMBGKorisnika [nvarchar](13) ,
+    @OcekivaniDatumIzdavanja [date],
+    @PTTMestaPU [int]
+)
+AS
+BEGIN
+    INSERT INTO ZAHTEVZAIZDAVANJEPASOSA (DatumiVremeZahteva, JMBGKorisnika, OcekivaniDatumIzdavanja, PTTMestaPU, Status)
+    VALUES (@DatumIVremeZahteva, @JMBGKorisnika, @OcekivaniDatumIzdavanja, @PTTMestaPU, 2)
+END
+GO
+
+CREATE PROCEDURE ObrisiZahtev
+(
+    @IDZahteva [int]
+)
+AS
+BEGIN
+    DELETE FROM ZAHTEVZAIZDAVANJEPASOSA
+    WHERE IDZahteva = @IDZahteva
+END
+GO
+
+CREATE PROCEDURE OdbijZahtev
+(
+    @IDZahteva [int]
+)
+AS
+BEGIN
+    UPDATE ZAHTEVZAIZDAVANJEPASOSA
+    SET Status = 1
+    WHERE IDZahteva = @IDZahteva
+END
+GO
+
+CREATE PROCEDURE OdobriZahtev
+(
+    @IDZahteva [int]
+)
+AS
+BEGIN
+    UPDATE ZAHTEVZAIZDAVANJEPASOSA
+    SET Status = 3
+    WHERE IDZahteva = @IDZahteva
+END
+GO
+
+CREATE PROCEDURE DajSveZahteveSaStatusom
+AS
+BEGIN
+    SELECT * FROM ZAHTEVZAIZDAVANJEPASOSAVIEW
+END
+GO
+
+CREATE PROCEDURE DajSveZahtevePoStatusu
+(
+    @Status [int]
+)
+AS
+BEGIN
+    SELECT * FROM ZAHTEVZAIZDAVANJEPASOSAVIEW
+    WHERE Status = @Status
+END
+GO
+
+CREATE PROCEDURE DajSveZahtevePoJMBG
+(
+    @JMBGKorisnika  
+)
+AS
+BEGIN
+    SELECT * FROM ZAHTEVZAIZDAVANJEPASOSAVIEW
+    WHERE JMBGKorisnika = @JMBGKorisnika
+END
+GO

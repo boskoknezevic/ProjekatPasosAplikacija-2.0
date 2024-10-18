@@ -1,0 +1,64 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewData["Title"] = "Пасоши";
+}
+
+<form method="get" action="@Url.Action("AdminPregledPasosa", "Sluzbenik")">
+    <label for="jmbgFilter">Претражи по ЈМБГ:</label>
+    <input type="text" id="jmbgFilter" name="jmbg" />
+    <button type="submit" class="btn btn-sm btn-success">Претражи</button>
+</form>
+
+<h1>Списак свих пасоша:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Број Пасоша</th>
+            <th>ЈМБГ</th>
+            <th>Име</th>
+            <th>Презиме</th>
+            <th>Држављанство</th>
+            <th>Држава Рођења</th>
+            <th>Статус Документа</th>
+            <th>Измени</th>
+            <th>Обриши</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            <tr>
+                <td>@row["BrojPasosa"]</td>
+                <td>@row["JMBGKorisnika"]</td>
+                <td>@row["ImeKorisnika"]</td>
+                <td>@row["PrezimeKorisnika"]</td>
+                <td>@row["IDDrzaveDrzavljanstva"]</td>
+                <td>@row["IDDrzavaRodjenja"]</td>
+                <td>@row["StatusDokumenta"]</td>
+                <td>
+                    <form method="post" action="@Url.Action("IzmeniPasos", "Admin")">
+                        <input type="hidden" name="jmbgKorisnika" value="@row["JMBGKorisnika"]" />
+                        <input type="hidden" name="action" value="izmeni" />
+                        <button type="submit" class="btn btn-sm btn-info">Измени</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="@Url.Action("IzmeniPasos", "Admin")">
+                        <input type="hidden" name="jmbgKorisnika" value="@row["JMBGKorisnika"]" />
+                        <input type="hidden" name="action" value="obrisi" />
+                        <button type="submit" class="btn btn-sm btn-danger">Обриши</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+
+}
+
+else
+{
+    <p>Нема пасоша.</p>
+}

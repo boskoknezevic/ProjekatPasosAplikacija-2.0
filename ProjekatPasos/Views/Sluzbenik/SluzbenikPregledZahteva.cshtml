@@ -1,0 +1,78 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Захтеви";
+}
+
+<h1>Списак неодобрених захтева:</h1>
+
+@if (Model != null && Model.Tables.Count > 0 && Model.Tables[0].Rows.Count > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>Датум и Време Захтева</th>
+            <th>ЈМБГ Корисника</th>
+            <th>Име</th>
+            <th>Презиме</th>
+            <th>Очекивани Датум Издавања</th>
+            <th>Место ПУ</th>
+            <th>Статус Захтева</th>
+            <th>Одобри</th>
+            <th>Одбиј</th>
+        </tr>
+
+        @foreach (DataRow row in Model.Tables[0].Rows)
+        {
+            if((int)row["StatusID"] == 2)
+            {
+                <tr>
+
+                    <td>@row["DatumIVremeZahteva"]</td>
+                    <td>@row["JMBGKorisnika"]</td>
+                    <td>@row["ImeKorisnika"]</td>
+                    <td>@row["PrezimeKorisnika"]</td>
+                    <td>@row["OcekivaniDatumIzdavanja"]</td>
+                    <td>@row["MestoPU"]</td>
+                    <td>@row["Status"]</td>
+                        <td>
+                            <form method="post" action="@Url.Action("UpravljajZahtevima", "Sluzbenik")">
+                                <input type="hidden" name="IDZahteva" value="@row["IDZahteva"]" />
+                                <input type="hidden" name="jmbg" value="@row["JMBGKorisnika"]" />
+                                <input type="hidden" name="pttMesto" value="@row["PTTMestoPU"]" />
+                                <input type="hidden" name="action" value="odobri" />
+                                <button type="submit" class="btn btn-sm btn-success">Одобри</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="@Url.Action("UpravljajZahtevima", "Sluzbenik")">
+                                <input type="hidden" name="IDZahteva" value="@row["IDZahteva"]" />
+                                <input type="hidden" name="jmbg" value="@row["JMBGKorisnika"]" />
+                                <input type="hidden" name="action" value="odbij" />
+                                <button type="submit" class="btn btn-sm btn-danger">Одбиј</button>
+                            </form>
+                        </td>
+                </tr>
+            }
+        }
+    </table>
+}
+
+else
+{
+    <p>Нема захтева.</p>
+}

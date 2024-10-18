@@ -1,0 +1,75 @@
+﻿@using System.Data;
+@model System.Data.DataSet
+
+@{
+    ViewBag.Title = "Детаљи о захтеву";
+    DataTable table = Model.Tables[0]; // Pretpostavljam da podaci dolaze iz prve tabele DataSet-a
+    DataRow row = table.Rows[0]; // Pretpostavljam da je prvi red onaj koji trebaš prikazati
+}
+
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>@ViewBag.Title</h1>
+
+        <form method="post" action="@Url.Action("IzmeniPodatkeZahteva", "Admin")">
+            <div class="form-group">
+                <label for="datumZahteva">Датум и Време Захтева:</label>
+                <input type="text" id="datumZahteva" name="datumZahteva" value="@row["DatumIVremeZahteva"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="jmbg">ЈМБГ:</label>
+                <input type="text" id="jmbg" name="jmbg" value="@row["JMBGKorisnika"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="ime">Име:</label>
+                <input type="text" id="ime" name="ime" value="@row["ImeKorisnika"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="prezime">Презиме:</label>
+                <input type="text" id="prezime" name="prezime" value="@row["PrezimeKorisnika"]" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label for="ocekivaniDatum">Очекивани Датум Издавања:</label>
+                <input type="date" id="ocekivaniDatum" name="ocekivaniDatum" value="@((row["OcekivaniDatumIzdavanja"] as DateTime?)?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="mestoPU">Место ПУ:</label>
+                <select id="mestoPU" name="mestoPU" class="form-control">
+                    <option value="">Изабери место</option>
+                    @if(ViewBag.ListaMesta != null)
+                    {
+                    @foreach (var mesto in ViewBag.ListaMesta as IEnumerable<dynamic>)
+                    {
+                        <option value="@mesto.PTT">@mesto.Naziv</option>
+                    }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Статус:</label>
+                <select id="status" name="status" class="form-control">
+                    <option value="">Изабери статус</option>
+                    @if (ViewBag.StatusiZahteva != null)
+                    {
+                    @foreach (var status in ViewBag.StatusiZahteva as IEnumerable<dynamic>)
+                    {
+                        <option value="@status.ID">@status.Opis</option>
+                    }
+                    }
+                </select>
+            </div>
+
+            <input hidden id="idZahteva" name="idZahteva" value="@row["IDZahteva"]" />
+            <button type="submit" class="btn btn-sm btn-success">Потврди</button>
+        </form>
+    </div>
+</body>
+</html>

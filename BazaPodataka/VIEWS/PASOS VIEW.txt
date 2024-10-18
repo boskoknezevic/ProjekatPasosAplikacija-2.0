@@ -1,0 +1,30 @@
+CREATE VIEW PasosView AS
+SELECT 
+    P.BrojPasosa,
+    P.StatusDokumenta AS StatusDokumentaID,
+    S.Opis AS StatusDokumenta,
+    K.JMBG AS JMBGKorisnika,
+    K.Ime AS ImeKorisnika,
+    K.Prezime AS PrezimeKorisnika,
+    K.DatumRodjenja,
+    M.PTT AS PTTMestoID,
+    M.Naziv AS Mesto,
+    DR1.SifraDrzave AS IDDrzavaRodjenja,
+    DR1.Naziv AS DrzavaRodjenja,
+    DR2.SifraDrzave AS IDDrzaveDrzavljanstva,
+    DR2.Naziv AS DrzavaDrzavljanstva,
+    MP.PTT AS PTTMestoPU,
+    MP.Naziv AS MestoPU,
+    P.DatumPocetkaVazenja,
+    P.DatumIsteka,
+    K.PolKorisnika AS PolKorisnikaID,
+    PK.Opis AS PolKorisnika
+FROM 
+    dbo.PASOS P
+    JOIN dbo.KORISNIK K ON P.JMBGKorisnika = K.JMBG
+    JOIN dbo.MESTO M ON P.PTTMesto = M.PTT
+    JOIN dbo.DRZAVA DR1 ON P.IDDrzavaRodjenja = DR1.SifraDrzave
+    JOIN dbo.DRZAVA DR2 ON P.IDDrzavaDrzavljanstva = DR2.SifraDrzave
+    JOIN dbo.MESTO MP ON P.PTTMestaPU = MP.PTT
+    JOIN dbo.StatusDokumenta S ON P.StatusDokumenta = S.ID
+    JOIN dbo.PolKorisnika PK ON K.PolKorisnika = PK.ID; 

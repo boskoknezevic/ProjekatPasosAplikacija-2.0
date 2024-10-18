@@ -1,0 +1,75 @@
+INSERT INTO TIPKORISNIKA (Opis) VALUES ('admin');
+INSERT INTO TIPKORISNIKA (Opis) VALUES ('sluzbenik');
+INSERT INTO TIPKORISNIKA (Opis) VALUES ('gradjanin');
+
+INSERT INTO TIPSTATUSA (Opis) VALUES ('odbijen');
+INSERT INTO TIPSTATUSA (Opis) VALUES ('na_cekanju');
+INSERT INTO TIPSTATUSA (Opis) VALUES ('odobren');
+
+INSERT INTO [dbo].[DRZAVA] (SifraDrzave, Naziv)
+VALUES 
+('SRB', 'Srbija'),
+('USA', 'Sjedinjene Američke Države'),
+('CAN', 'Kanada'),
+('DEU', 'Nemačka'),
+('FRA', 'Francuska'),
+('GBR', 'Ujedinjeno Kraljevstvo'),
+('ITA', 'Italija'),
+('CHN', 'Kina'),
+('JPN', 'Japan'),
+('AUS', 'Australija');
+
+INSERT INTO [dbo].[MESTO] (PTT, Naziv, SifraDrzave)
+VALUES 
+(11000, 'Beograd', 'SRB'),
+(21000, 'Novi Sad', 'SRB'),
+(34000, 'Kragujevac', 'SRB'),
+(18000, 'Niš', 'SRB'),
+(25000, 'Sombor', 'SRB'),
+(31000, 'Užice', 'SRB'),
+(24000, 'Subotica','SRB'),
+(15000, 'Šabac', 'SRB'),
+(22000, 'Sremska Mitrovica', 'SRB'),
+(23000, 'Zrenjanin', 'SRB');
+
+INSERT INTO STATUSDOKUMENTA (Opis) VALUES ('zaprimljen');
+INSERT INTO STATUSDOKUMENTA (Opis) VALUES ('odbijen');
+INSERT INTO STATUSDOKUMENTA (Opis) VALUES ('u obradi');
+INSERT INTO STATUSDOKUMENTA (Opis) VALUES ('gotov za izdavanje');
+INSERT INTO STATUSDOKUMENTA (Opis) VALUES ('izdat');
+
+INSERT INTO POLKORISNIKA (Opis) VALUES ('Muski');
+INSERT INTO POLKORISNIKA (Opis) VALUES ('Zenski');
+
+INSERT INTO KORISNIK (
+    JMBG,
+    Ime,
+    Prezime,
+    DatumRodjenja,
+    Adresa,
+    Telefon,
+    PTTMesto,
+    IDDrzavaRodjenja,
+    IDDrzavaDrzavljanstva,
+    KorisnickoIme,
+    PolKorisnika,
+    Email,
+    Lozinka,
+    TipKorisnika
+) VALUES (
+    '1234567890123',
+    'Admin',
+    'Admin',
+    '2001-11-25',
+    'Glavna 1',
+    '123456789',
+    23000,
+    'SRB', 
+    'SRB', 
+    'admin',
+    1,
+    'admin@izdavanjepasosa.com',
+    'lozinka',
+    1
+);
+
